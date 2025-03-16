@@ -2,12 +2,12 @@ from os.path import exists
 import tempfile
 from typing import cast
 
-from shared import SupportedFile, clone_git_repo, get_supported_file_path, parse_input_arguments, transform_short_git_repo
+from shared import SupportedFile, clone_git_repo, get_full_git_repo_url, get_supported_file_path, parse_input_arguments
 
 if __name__ == "__main__":
     input_arguments = parse_input_arguments()
     # Set our repository URL
-    git_repository_url = transform_short_git_repo(str(input_arguments.short_git_repo)) if None is not input_arguments.short_git_repo else input_arguments.full_git_repo_url
+    git_repository_url = get_full_git_repo_url(input_arguments.git_repo, True)
 
     # Create a temporary directory to store our files
     with tempfile.TemporaryDirectory() as staging_directory:
@@ -31,12 +31,18 @@ if __name__ == "__main__":
                     print("Profile")
                     print("-------")
                     print(profile_fd.read())
+                    # Print an extra newline for spacing
+                    print("")
+            else:
+                print("No profile information")
             
             if exists(project_file_path):
                 with open(project_file_path, "r") as project_fd:
                     print("Current Project(s)")
                     print("------------------")
                     print(project_fd.read())
+                    # Print an extra newline for spacing
+                    print("")
             else:
                 print("No Current Projects")
                 
@@ -45,6 +51,8 @@ if __name__ == "__main__":
                     print(".plan file")
                     print("----------")
                     print(plan_fd.read())
+                    # Print an extra newline for spacing
+                    print("")
             else:
                 print("No .plan")
         else:
