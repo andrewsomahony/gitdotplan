@@ -4,9 +4,7 @@ import sys
 import datetime
 from typing import cast
 
-from shared import SupportedFile, clone_git_repo, get_full_git_repo_url, get_supported_file_path, parse_input_arguments, run_git_command, run_subprocess
-
-EDITOR="nvim"
+from shared import SupportedFile, clone_git_repo, get_full_git_repo_url, get_supported_file_path, parse_input_arguments, run_git_command
 
 def _set_file_contents(file_path, new_contents):
     """Set the contents of the file at the given path to the new contents"""
@@ -52,18 +50,8 @@ if __name__ == "__main__":
             if not sys.stdin.isatty():
                 file_data = sys.stdin.read()
             else:
-                # Run our editor process; this method will throw an Exception if the process exits
-                # with a non-zero return code
-                run_subprocess(
-                    [EDITOR, file_path],
-                    hide_output=False,
-                    cwd=staging_directory
-                )
-    
-                # We have made our edit in our editor, so obtain our file_data from the file
-                # itself
-                with open(file_path) as new_file:
-                    file_data = new_file.read()
+                error_message = "No data provided to stdin"
+                raise RuntimeError(error_message)
     
             # Set our file contents with our file data
             _set_file_contents(
